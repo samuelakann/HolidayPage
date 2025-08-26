@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Results for "{{ query }}"</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-spinner *ngIf="loading"></ion-spinner>
+  <p *ngIf="error">{{ error }}</p>
+
+  <ion-list *ngIf="!loading && results.length > 0">
+    <ion-item *ngFor="let country of results">
+      <ion-label>
+        <h2>{{ country.name.common }}</h2>
+        <p>Region: {{ country.region }}</p>
+        <p>Population: {{ country.population | number }}</p>
+        <p>Capital City: {{ country.capital ? country.capital[0] : 'N/A' }}</p>
+        <p>Language: {{ country.languages ? (country.languages | keyvalue)[0].value : 'N/A' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
