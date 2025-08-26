@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonSpinner } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
+import { IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-destinations',
@@ -17,7 +18,8 @@ import { CommonModule } from '@angular/common';
     IonList,
     IonItem,
     IonLabel,
-    IonSpinner
+    IonSpinner,
+    IonButton
   ],
   templateUrl: './destinations.page.html',
   styleUrls: ['./destinations.page.scss']
@@ -54,4 +56,14 @@ export class DestinationsPage implements OnInit {
         }
       });
   }
+
+  addToFavourites(country: any) {
+  let favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
+
+  //avoiding duplicates
+  if (!favourites.find((c: any) => c.name.common === country.name.common)) {
+    favourites.push(country);
+    localStorage.setItem('favourites', JSON.stringify(favourites));
+  }
+}
 }

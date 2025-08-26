@@ -1,32 +1,49 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Holiday Planner</ion-title>
+    <ion-title id="header">Holiday Planner</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Plan your next trip 🌍</h2>
+<ion-content class="ion-padding" id="info">
+  <h2>Plan your next trip</h2>
 
-  <ion-item>
+  <ion-item id="destination">
     <ion-label position="floating">Enter a destination</ion-label>
     <ion-input [(ngModel)]="destination"></ion-input>
   </ion-item>
 
-  <ion-button expand="block" class="ion-margin-top" (click)="search()">
-    Search
-  </ion-button>
+  <ion-button class="ion-margin-top" id="search" (click)="search()"> Search </ion-button>
 
-  <div class="ion-margin-top">
-    <h3>Your current country:</h3>
-    <ion-spinner *ngIf="loadingLocation"></ion-spinner>
-    <p *ngIf="locationError">{{ locationError }}</p>
-    <div *ngIf="currentCountry">
-      <p><strong>Name:</strong> {{ currentCountry.name.common }}</p>
-      <p><strong>Region:</strong> {{ currentCountry.region }}</p>
-      <p><strong>Population:</strong> {{ currentCountry.population | number }}</p>
-      <p><strong>Capital:</strong> {{ currentCountry.capital ? currentCountry.capital[0] : 'N/A' }}</p>
-      <p><strong>Languages:</strong> {{ currentCountry.languages ? (currentCountry.languages | keyvalue)[0].value : 'N/A' }}</p>
-      <p><strong>Currency:</strong> {{ currentCountry.currencies ? (currentCountry.currencies | keyvalue)[0].value.name : 'N/A' }}</p>
+  <div id="mainbox">
+    <div class="ion-margin-top" id="main">
+      <div id="currentCountry">
+        <h3>Your current country:</h3>
+        <ion-spinner *ngIf="loadingLocation"></ion-spinner>
+        <p *ngIf="locationError">{{ locationError }}</p>
+        <div *ngIf="currentCountry">
+          <p><strong>Name:</strong> {{ currentCountry.name.common }}</p>
+          <p><strong>Region:</strong> {{ currentCountry.region }}</p>
+          <p><strong>Population:</strong> {{ currentCountry.population | number }}</p>
+          <p><strong>Capital:</strong> {{ currentCountry.capital ? currentCountry.capital[0] : 'N/A' }}</p>
+          <p><strong>Languages:</strong> {{ currentCountry.languages ? (currentCountry.languages | keyvalue)[0].value : 'N/A' }}</p>
+          <p><strong>Currency:</strong> {{ currentCountry.currencies ? (currentCountry.currencies | keyvalue)[0].value.name : 'N/A' }}</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="ion-margin-top" id="favourite">
+  <h3>Your Favourites</h3>
+  <ion-list *ngIf="favourites.length > 0" id="favourites">
+    <ion-item *ngFor="let fav of favourites" (click)="openFavourite(fav)">
+      <ion-label>
+        <h2>{{ fav.name.common }}</h2>
+        <p>{{ fav.region }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <p *ngIf="favourites.length === 0">No favourites yet</p>
+</div>
+
 </ion-content>
+

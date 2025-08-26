@@ -8,15 +8,17 @@
   <ion-spinner *ngIf="loading"></ion-spinner>
   <p *ngIf="error">{{ error }}</p>
 
-  <ion-list *ngIf="!loading && results.length > 0">
-    <ion-item *ngFor="let country of results">
-      <ion-label>
-        <h2>{{ country.name.common }}</h2>
+  <ion-list *ngIf="!loading && results.length > 0" id="result">
+    <ion-item *ngFor="let country of results" >
+      <ion-label id="searchResult">
+        <h1>{{ country.name.common }}</h1>
         <p>Region: {{ country.region }}</p>
         <p>Population: {{ country.population | number }}</p>
         <p>Capital City: {{ country.capital ? country.capital[0] : 'N/A' }}</p>
         <p>Language: {{ country.languages ? (country.languages | keyvalue)[0].value : 'N/A' }}</p>
       </ion-label>
+
+       <ion-button id="favButton" fill="outline" (click)="addToFavourites(country)">Add to Favourites </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

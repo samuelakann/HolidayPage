@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonSpinner } from '@ionic/angular/standalone';
+import { IonHeader, IonList, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonSpinner } from '@ionic/angular/standalone';
 import { Geolocation } from '@capacitor/geolocation';
 import { CommonModule } from '@angular/common';
 
@@ -30,7 +30,8 @@ interface Country {
     IonLabel,
     IonInput,
     IonButton,
-    IonSpinner
+    IonSpinner,
+    IonList
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
@@ -40,13 +41,15 @@ export class HomePage implements OnInit {
   currentCountry: Country | null = null;
   loadingLocation: boolean = false;
   locationError: string = '';
+  favourites: any[] = [];
 
-  private OPENWEATHER_KEY = 'e06e6dd79dcd1680d8facb99f3660385'; // replace with your key
+  private OPENWEATHER_KEY = 'e06e6dd79dcd1680d8facb99f3660385';
 
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit() {
     this.getUserCountry();
+    this.loadFavourites();
   }
 
   search() {
@@ -55,6 +58,14 @@ export class HomePage implements OnInit {
     }
   }
 
+  loadFavourites() {
+  this.favourites = JSON.parse(localStorage.getItem('favourites') || '[]');
+  }
+
+  openFavourite(fav: any) {
+    this.router.navigate(['/destinations'], { queryParams: { q: fav.name.common } });
+}
+
   async getUserCountry() {
     this.loadingLocation = true;
     try {
@@ -62,22 +73,17 @@ export class HomePage implements OnInit {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
 
-      // OpenWeatherMap reverse geocoding
+      // OpenWeatherMap reverse geocoding, gets country ISO code from coords, passes to REST Countries API for country name
       const url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${this.OPENWEATHER_KEY}`;
       this.http.get<any[]>(url).subscribe({
         next: (data) => {
           if (data.length > 0) {
-            const countryISO = data[0].country; // e.g., "ES"
+            const countryISO = data[0].country;
             this.fetchCountryInfo(countryISO);
           } else {
             this.locationError = 'Could not determine your country';
             this.loadingLocation = false;
           }
-        },
-        error: (err) => {
-          console.error('OpenWeatherMap Geocoding API error:', err);
-          this.locationError = 'Geocoding API failed';
-          this.loadingLocation = false;
         }
       });
     } catch (err) {
@@ -88,7 +94,7 @@ export class HomePage implements OnInit {
   }
 
   fetchCountryInfo(isoCode: string) {
-    // REST Countries API can fetch by alpha code
+    // REST Countries API fetches by iso code
     this.http.get<Country[]>(`https://restcountries.com/v3.1/alpha/${isoCode}`).subscribe({
       next: (data) => {
         this.currentCountry = data[0];
