@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h2>Plan your next trip</h2>
+  <h2>Plan your next trip 🌍</h2>
 
   <ion-item>
     <ion-label position="floating">Enter a destination</ion-label>
@@ -15,4 +15,19 @@
   <ion-button expand="block" class="ion-margin-top" (click)="search()">
     Search
   </ion-button>
+
+  <!-- Current location section -->
+  <div class="ion-margin-top">
+    <h3>Your current country:</h3>
+    <ion-spinner *ngIf="loadingLocation"></ion-spinner>
+    <p *ngIf="locationError">{{ locationError }}</p>
+    <div *ngIf="currentCountry">
+      <p><strong>Name:</strong> {{ currentCountry.name.common }}</p>
+      <p><strong>Region:</strong> {{ currentCountry.region }}</p>
+      <p><strong>Population:</strong> {{ currentCountry.population | number }}</p>
+      <p><strong>Capital:</strong> {{ currentCountry.capital ? currentCountry.capital[0] : 'N/A' }}</p>
+      <p><strong>Languages:</strong> {{ currentCountry.languages }}</p>
+      <p><strong>Currency:</strong> {{ currentCountry.currencies ? (currentCountry.currencies | keyvalue)[0].value.name : 'N/A' }}</p>
+    </div>
+  </div>
 </ion-content>
