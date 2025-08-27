@@ -1,11 +1,3 @@
-#container {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
 
 #container strong {
   font-size: 20px;
@@ -66,4 +58,26 @@ h2 {
   }
 }
 
+#countryAndFavs {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 20px;
+  margin-top: 10px;
+  align-items: center;
+}
 
+#currentCountry,
+#favourite {
+  flex: 1;
+  min-width: 300px; 
+}
+
+#mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;       
+  justify-content: center;   
+  text-align: center;
+  min-height: 80%;          
+  gap: 30px;                 
+}
